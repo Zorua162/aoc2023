@@ -1,13 +1,14 @@
 from day1.day_1_solution import part1, part2, build_index, build_result
+current_day = "day1"
 
 
 def test_example_data_output_part1():
-    output = part1("example_data.txt")
+    output = part1(f"{current_day}/part1_example_data.txt")
     assert output == 142
 
 
 def test_data_output_part1():
-    output = part1("data.txt")
+    output = part1(f"{current_day}/data.txt")
     assert output == 54390
 
 
@@ -33,10 +34,10 @@ def test_build_result():
 
 
 def test_example_data_output_part2():
-    output = part2("example_data_part2.txt")
+    output = part2(f"{current_day}/part2_example_data.txt")
     assert output == 281
 
 
 def test_data_output_part2():
-    output = part2("data.txt")
+    output = part2(f"{current_day}/data.txt")
     assert output == 54277
