@@ -1,4 +1,3 @@
-
 def main(data_path):
     with open(data_path, "r") as f_obj:
         data = f_obj.read().split("\n")
