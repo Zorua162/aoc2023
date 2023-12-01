@@ -1,4 +1,4 @@
-from template.day_x_solution import main
+from day1.day_1_solution import main
 import pytest
 
 
