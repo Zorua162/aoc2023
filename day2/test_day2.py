@@ -1,4 +1,4 @@
-from day2.day_2_solution import (
+from day2.day2_solution import (
     part1,
     part2,
     parse_data,

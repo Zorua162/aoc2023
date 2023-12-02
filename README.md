@@ -10,10 +10,10 @@ unit testing, as I go.
 ```bash
 template/
 ├── data.txt
-├── day_x_solution.py
+├── dayx_solution.py
 ├── part1_example_data.txt
 ├── part2_example_data.txt
-└── test_day_x.py
+└── test_dayx.py
 ```
 
 I've written myself a template, which I'm hoping to copy paste each day, to save the

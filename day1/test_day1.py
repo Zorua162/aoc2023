@@ -1,4 +1,4 @@
-from day1.day_1_solution import part1, part2, build_index, build_result
+from day1.day1_solution import part1, part2, build_index, build_result
 
 current_day = "day1"
 
