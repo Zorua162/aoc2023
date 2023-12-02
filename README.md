@@ -25,7 +25,7 @@ Things that need updating in each template:
 
 - Copy template folder
 - Rename it to the current day name (for example dayx)
-- Rename the solution file, so `day_x_solution.py` -> `day_1_solution.py`
-- Rename the test file, so `test_day_x.py` -> `test_day_1.py`
+- Rename the solution file, so `dayx_solution.py` -> `day1_solution.py`
+- Rename the test file, so `test_dayx.py` -> `test_day1.py`
 - Update the import path in the test file
-- Update the `current_day` variable in the test file to be the name of the current folder
+- Update the `current_day` variable in both files to be the name of the current folder
