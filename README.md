@@ -27,7 +27,7 @@ Things that need updating in each template:
 - Update the import path in the test file
 - Update the `current_day` variable in both files to be the name of the current folder
 
-### Automation
+### Tempate automation
 
 These steps are automated by the script `generate_new_day.py`, which is run by giving
 it the day number which is wished to be generated
@@ -43,10 +43,10 @@ Pre-commit has been setup for this repo, which provides the standards that shoul
 followed. These standards are all automated, so as long as valid Python code is
 submitted then commiting once with errors should automatically resolve themselves.
 
-### Setup
+### Setup pre-commit
 
 To setup the pre-commits, first install pre-commit via the `requirements-dev.txt` file:
-`python -m pip install -r requirements.txt`
+`python -m pip install -r requirements-dev.txt`
 
 Now setup the pre-commits in your local environment:
 `pre-commit install`
@@ -63,3 +63,7 @@ are commited.
  it
 
 - trailing whitespace: Remove whitespace
+
+### Pre-commit automation
+
+Pre-commit.ci automatically runs these checks as an action on Github
