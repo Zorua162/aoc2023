@@ -45,7 +45,7 @@ submitted then commiting once with errors should automatically resolve themselve
 
 ### Setup
 
-To setup the pre-commits, first install pre-commit via the `dev-requirements.txt` file:
+To setup the pre-commits, first install pre-commit via the `requirements-dev.txt` file:
 `python -m pip install -r requirements.txt`
 
 Now setup the pre-commits in your local environment:
