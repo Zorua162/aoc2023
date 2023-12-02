@@ -16,7 +16,6 @@ def part2(data_path):
 
 
 if __name__ == "__main__":
-    # TODO: Put full path in here, and add print around all of these
     print(part1(f"{current_day}/part1_example_data.txt"))
     # print(part1(f"{current_day}/data.txt"))
     # print(part2(f"{current_day}/part2_example_data.txt"))
