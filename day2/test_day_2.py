@@ -1,12 +1,12 @@
-from template.day_x_solution import part1, part2
+from day2.day_2_solution import part1, part2
 import pytest
 
-current_day = "template"
+current_day = "day2"
 
 
 def test_part1_example_data_output():
     output = part1(f"{current_day}/part1_example_data.txt")
-    assert output == ["1", "2", "3", ""]
+    assert output == 8
 
 
 @pytest.mark.skip("Answer is from AOC website")
@@ -15,6 +15,7 @@ def test_part1_data_output():
     assert output == "currently unknown"
 
 
+@pytest.mark.skip("Not started yet")
 def test_part2_example_data_output():
     output = part2(f"{current_day}/part1_example_data.txt")
     assert output == ["1", "2", "3", ""]
