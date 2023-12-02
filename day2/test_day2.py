@@ -5,7 +5,6 @@ from day2.day2_solution import (
     find_fewest_cubes_per_game,
     power_values,
 )
-import pytest
 
 current_day = "day2"
 
@@ -60,7 +59,6 @@ def test_part2_example_data_output():
     assert output == 2286
 
 
-@pytest.mark.skip("Answer is from AOC website")
 def test_part2_data_output():
     output = part2(f"{current_day}/data.txt")
-    assert output == "currently unknown"
+    assert output == 77021
