@@ -1,4 +1,4 @@
-from template.day_x_solution import part1, part2
+from template.dayx_solution import part1, part2
 import pytest
 
 current_day = "template"
