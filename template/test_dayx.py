@@ -15,6 +15,7 @@ def test_part1_data_output():
     assert output == "currently unknown"
 
 
+@pytest.mark.skip("Part 2 not started yet")
 def test_part2_example_data_output():
     output = part2(f"{current_day}/part1_example_data.txt")
     assert output == ["1", "2", "3", ""]

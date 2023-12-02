@@ -4,10 +4,15 @@ import os
 
 def create_folder(day_number: int) -> None:
     # Copy the folder
-    shutil.copytree("template", f"day{day_number}")
+    print("Copying files into folder")
+    try:
+        shutil.copytree("template", f"day{day_number}")
+    except FileExistsError:
+        raise Exception(f"Folder day{day_number} already exists, exiting")
 
 
 def change_file_names(day_number: int) -> None:
+    print("Updating file names")
     day_folder = f"day{day_number}"
     # Renmae the solution file
     os.rename(
@@ -18,17 +23,23 @@ def change_file_names(day_number: int) -> None:
 
 
 def update_file_content(day_number: int) -> None:
+    print("Editing files")
     day_folder = f"day{day_number}"
-    file_list = [f"{day_folder}/day1_solution.py"]
+    file_list = [
+        f"{day_folder}/day{day_number}_solution.py",
+        f"{day_folder}/test_day{day_number}.py",
+    ]
     for file_name in file_list:
-        with open(file_name, "w") as f_obj:
-            file_content = f_obj.read()
-            print(file_content)
-            # replace the file name
-            file_content.replace("dayx", f"day{day_number}")
-            # replace the folder name
-            file_content.replace("template", f"day{day_number}")
-            f_obj.write(file_content)
+        print(f"    Currently editing {file_name}")
+        with open(file_name, "r") as read_obj:
+            file_content = read_obj.read()
+        # print(file_content)
+        # replace the file name
+        file_content = file_content.replace("dayx", f"day{day_number}")
+        # replace the folder name
+        file_content = file_content.replace("template", f"day{day_number}")
+        with open(file_name, "w") as write_obj:
+            write_obj.write(file_content)
 
 
 def main():
@@ -48,6 +59,8 @@ def main():
         valid = True
     print(f"Using day number {day_number}")
     create_folder(day_number)
+    change_file_names(day_number)
+    update_file_content(day_number)
 
 
 if __name__ == "__main__":
