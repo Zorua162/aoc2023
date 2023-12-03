@@ -1,3 +1,4 @@
+#!/bin/env python
 import shutil
 import os
 
@@ -61,6 +62,7 @@ def main():
     create_folder(day_number)
     change_file_names(day_number)
     update_file_content(day_number)
+    print("Done! Enjoy your day")
 
 
 if __name__ == "__main__":
