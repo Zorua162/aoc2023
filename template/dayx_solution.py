@@ -1,18 +1,18 @@
 current_day = "dayx"
 
 
-def part1(data_path):
+def part1(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = f_obj.read().split("\n")
     print(data)
-    return data
+    return 0
 
 
-def part2(data_path):
+def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = f_obj.read().split("\n")
     print(data)
-    return data
+    return 0
 
 
 if __name__ == "__main__":
