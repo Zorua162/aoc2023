@@ -3,15 +3,15 @@ current_day = "dayx"
 
 def part1(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
-        data = f_obj.read().split("\n")
+        data = [line for line in f_obj.read().split("\n") if line != ""]
     print(data)
     return 0
 
 
 def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
-        data = f_obj.read().split("\n")
-    print(data)
+        data = [line for line in f_obj.read().split("\n") if line != ""]
+        print(data)
     return 0
 
 

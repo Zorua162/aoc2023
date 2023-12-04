@@ -122,6 +122,6 @@ if __name__ == "__main__":
     # print(part2(f"{current_day}/data.txt"))
 
 # Incorrect submitted answers
-# 1420741 too high
-# 1419826 too high
-# 1634187 too high
+# 1,420,741 too high
+# 1,419,826 too high
+# 1,634,187 too high
