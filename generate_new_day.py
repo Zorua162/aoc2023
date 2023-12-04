@@ -1,6 +1,7 @@
 #!/bin/env python
 import shutil
 import os
+import sys
 
 
 def create_folder(day_number: int) -> None:
@@ -45,17 +46,29 @@ def update_file_content(day_number: int) -> None:
 
 def main():
     valid = False
+    invalid_command_argument = False
     while not valid:
         try:
-            day_number = int(input("Please input the day number:"))
+            if len(sys.argv) >= 2 and not invalid_command_argument:
+                value = sys.argv[1]
+            else:
+                value = input("\nPlease input the day folder number: ")
+            day_number = int(value)
         except ValueError:
-            print("Invalid value, must be an integer")
+            if len(sys.argv) >= 2:
+                invalid_command_argument = True
+            print(
+                f'\nInvalid value "{value}", the value entered must be an integer, '
+                'parsable by "int()"'
+            )
             continue
+        except KeyboardInterrupt:
+            raise Exception("Exiting due to keyboard interrupt")
         if day_number > 26:
-            print("Day value too high, must be < 26")
+            print(f'Day value "{value}" too high, must be < 26')
             continue
         if day_number < 1:
-            print("Day value too low, must be >= 1")
+            print(f'Day value "{value}" too low, must be >= 1')
             continue
         valid = True
     print(f"Using day number {day_number}")
