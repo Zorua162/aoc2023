@@ -83,7 +83,10 @@ def sum_numbers(number_data: list) -> int:
         number = item[0]
         other_data = item[1]
         if other_data != "":
-            print(f"Adding number {number}, with other_data {other_data}")
+            print(
+                f"Adding number {number}, with other_data {other_data} current "
+                f"total is {total}"
+            )
             total += int(number)
         else:
             print(f"Not adding {number}, with other_data {other_data}")
@@ -98,8 +101,10 @@ def part1(data_path: str) -> int:
     # merged_data = merge_data(uneeded_removed)
     merged_data = merge_data(parsed_data)
     print(merged_data)
+    total_sum: int = sum_numbers(merged_data)
+    print(f"Length of merged data {len(merged_data)}")
 
-    return sum_numbers(merged_data)
+    return total_sum
 
 
 def part2(data_path):
