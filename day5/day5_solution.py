@@ -55,7 +55,7 @@ def find_value_in_source_dest_list(source_dest_list: list, value: int) -> int:
         source = dest_source_range_list[1]
         destination = dest_source_range_list[0]
         ds_range = dest_source_range_list[2]
-        if value > source and value < source + ds_range:
+        if value >= source and value < source + ds_range:
             diff = value - source
             return destination + diff
 
@@ -95,15 +95,33 @@ def part1(data_path: str) -> int:
     return find_lowest_seed_location(parsed_data)
 
 
+def expand_seeds(parsed_data: dict) -> dict:
+    print("Expanding seed data")
+    seeds = parsed_data["seeds"]
+    new_seeds: list = []
+    for i in range(0, len(seeds), 2):
+        print(
+            f"Seed set {i/2}/ {len(seeds)/2} current length of new_seeds "
+            f"{len(new_seeds):.3E}"
+        )
+        set_of_seeds = [
+            seed_number for seed_number in range(seeds[i], seeds[i] + seeds[i + 1] + 1)
+        ]
+        new_seeds.extend(set_of_seeds)
+    parsed_data["seeds"] = new_seeds
+    return parsed_data
+
+
 def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
-        data = [line for line in f_obj.read().split("\n") if line != ""]
-        print(data)
-    return 0
+        data = [line for line in f_obj.read().split("\n\n") if line != ""]
+    parsed_data = parse_data(data)
+    parsed_data = expand_seeds(parsed_data)
+    return find_lowest_seed_location(parsed_data)
 
 
 if __name__ == "__main__":
     # print(part1(f"{current_day}/part1_example_data.txt"))
-    print(part1(f"{current_day}/data.txt"))
+    # print(part1(f"{current_day}/data.txt"))
     # print(part2(f"{current_day}/part2_example_data.txt"))
-    # print(part2(f"{current_day}/data.txt"))
+    print(part2(f"{current_day}/data.txt"))

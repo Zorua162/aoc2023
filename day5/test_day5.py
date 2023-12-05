@@ -3,6 +3,7 @@ from day5.day5_solution import (
     part2,
     parse_data,
     find_seed_location,
+    find_value_in_source_dest_list,
 )
 import pytest
 
@@ -30,6 +31,12 @@ def test_get_location(example_data) -> None:
     assert 82 == location
 
 
+def test_find_value_in_source_dest_list() -> None:
+    source_dest_list = [[45, 77, 23], [81, 45, 19], [68, 64, 13]]
+    # Above lower bound
+    assert 45 == find_value_in_source_dest_list(source_dest_list, 77)
+
+
 def test_part1_example_data_output() -> None:
     output: int = part1(f"{current_day}/part1_example_data.txt")
     assert 35 == output
@@ -40,10 +47,9 @@ def test_part1_data_output():
     assert 282277027 == output
 
 
-@pytest.mark.skip("Part 2 not started yet")
 def test_part2_example_data_output() -> None:
     output: int = part2(f"{current_day}/part1_example_data.txt")
-    assert 0 == output
+    assert 46 == output
 
 
 @pytest.mark.skip("Answer is from AOC website")
