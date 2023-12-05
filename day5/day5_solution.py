@@ -54,16 +54,17 @@ def find_value_in_source_dest_list(
     """
 
     for dest_source_range_list in source_dest_list:
-        if not reverse:
-            source = dest_source_range_list[0]
-            destination = dest_source_range_list[1]
-        else:
-            source = dest_source_range_list[1]
-            destination = dest_source_range_list[0]
+        destination = dest_source_range_list[0]
+        source = dest_source_range_list[1]
         ds_range = dest_source_range_list[2]
-        if value >= source and value < source + ds_range:
-            diff = value - source
-            return destination + diff
+        diff = source - destination
+        # print(f"src {source} dst {destination}")
+        if not reverse:
+            if value >= source and value < source + ds_range:
+                return value - diff
+        else:
+            if value >= destination and value < destination + ds_range:
+                return value + diff
 
     return value
 
@@ -75,12 +76,12 @@ def find_seed_location(seed: int, parsed_data: dict, reverse=False) -> int:
         keys = list(reversed(keys))
     for key in keys:
         current_source_dest_list = parsed_data[key]
-        print(
-            f"Current key is {key}, current value is {current_value}, "
-            f"current source dest list is {current_source_dest_list}"
-        )
+        # print(
+        #     f"Current key is {key}, current value is {current_value}, "
+        #     f"current source dest list is {current_source_dest_list}"
+        # )
         current_value = find_value_in_source_dest_list(
-            current_source_dest_list, current_value, reverse=True
+            current_source_dest_list, current_value, reverse=reverse
         )
     return current_value
 

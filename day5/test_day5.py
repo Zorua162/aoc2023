@@ -37,8 +37,7 @@ def test_get_location(parsed_data) -> None:
 
 def test_find_value_in_source_dest_list() -> None:
     source_dest_list = [[45, 77, 23], [81, 45, 19], [68, 64, 13]]
-    # Above lower bound
-    assert 77 == find_value_in_source_dest_list(source_dest_list, 45)
+    assert 45 == find_value_in_source_dest_list(source_dest_list, 77)
 
 
 def test_part1_example_data_output() -> None:
@@ -70,7 +69,7 @@ def test_part2_example_data_output() -> None:
     assert 46 == output
 
 
-@pytest.mark.skip("Answer is from AOC website")
+@pytest.mark.skip("Answer takes a few mins, so skipping test")
 def test_part2_data_output():
     output = part2(f"{current_day}/data.txt")
-    assert output == "currently unknown"
+    assert 11554135 == output
