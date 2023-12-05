@@ -39,7 +39,9 @@ def parse_data(data: list) -> dict:
     return parsed_data
 
 
-def find_value_in_source_dest_list(source_dest_list: list, value: int) -> int:
+def find_value_in_source_dest_list(
+    source_dest_list: list, value: int, reverse=False
+) -> int:
     """Takes in the destination source list and a value to find in it and output its
     corresponding value
 
@@ -52,8 +54,12 @@ def find_value_in_source_dest_list(source_dest_list: list, value: int) -> int:
     """
 
     for dest_source_range_list in source_dest_list:
-        source = dest_source_range_list[1]
-        destination = dest_source_range_list[0]
+        if not reverse:
+            source = dest_source_range_list[0]
+            destination = dest_source_range_list[1]
+        else:
+            source = dest_source_range_list[1]
+            destination = dest_source_range_list[0]
         ds_range = dest_source_range_list[2]
         if value >= source and value < source + ds_range:
             diff = value - source
@@ -62,9 +68,11 @@ def find_value_in_source_dest_list(source_dest_list: list, value: int) -> int:
     return value
 
 
-def find_seed_location(seed: int, parsed_data: dict) -> int:
+def find_seed_location(seed: int, parsed_data: dict, reverse=False) -> int:
     current_value = seed
     keys = [key for key in parsed_data.keys() if key != "seeds"]
+    if reverse:
+        keys = list(reversed(keys))
     for key in keys:
         current_source_dest_list = parsed_data[key]
         print(
@@ -72,7 +80,7 @@ def find_seed_location(seed: int, parsed_data: dict) -> int:
             f"current source dest list is {current_source_dest_list}"
         )
         current_value = find_value_in_source_dest_list(
-            current_source_dest_list, current_value
+            current_source_dest_list, current_value, reverse=True
         )
     return current_value
 
@@ -95,29 +103,46 @@ def part1(data_path: str) -> int:
     return find_lowest_seed_location(parsed_data)
 
 
-def expand_seeds(parsed_data: dict) -> dict:
-    print("Expanding seed data")
-    seeds = parsed_data["seeds"]
-    new_seeds: list = []
-    for i in range(0, len(seeds), 2):
-        print(
-            f"Seed set {i/2}/ {len(seeds)/2} current length of new_seeds "
-            f"{len(new_seeds):.3E}"
-        )
-        set_of_seeds = [
-            seed_number for seed_number in range(seeds[i], seeds[i] + seeds[i + 1] + 1)
-        ]
-        new_seeds.extend(set_of_seeds)
-    parsed_data["seeds"] = new_seeds
-    return parsed_data
+def find_number_of_locations(parsed_data: dict):
+    possible_locations = 0
+    for location in parsed_data["humidity-to-location"]:
+        possible_locations += location[2]
+    print(f"There are {possible_locations:,} possible locations and one lowest one")
+
+
+def check_if_seed_exists(seed_number: int, seed_data: list) -> bool:
+    for i in range(0, len(seed_data), 2):
+        if (
+            seed_number >= seed_data[i]
+            and seed_number < seed_data[i] + seed_data[i + 1]
+        ):
+            return True
+    return False
+
+
+def check_if_valid_location(parsed_data: dict, current_location: int) -> bool:
+    """Go backwards through the dest source lists to find if a seed corresponds to the
+    location
+    """
+    seed_number = find_seed_location(current_location, parsed_data, True)
+    return check_if_seed_exists(seed_number, parsed_data["seeds"])
 
 
 def part2(data_path: str) -> int:
+    """Plan is to start at the lowest possible location and check if its valid,
+    increasing the location spot until a valid destination is found and that is the
+    lowest location"""
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n\n") if line != ""]
     parsed_data = parse_data(data)
-    parsed_data = expand_seeds(parsed_data)
-    return find_lowest_seed_location(parsed_data)
+    lowest_location = 0
+    while not check_if_valid_location(parsed_data, lowest_location):
+        if lowest_location % 10000 == 0:
+            print(f"Failed check for {lowest_location:,}")
+        lowest_location += 1
+    print(f"Lowest location was found to be: {lowest_location}")
+    return lowest_location
+    # return find_lowest_seed_location(parsed_data)
 
 
 if __name__ == "__main__":
