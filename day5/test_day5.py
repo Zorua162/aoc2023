@@ -2,7 +2,6 @@ from day5.day5_solution import (
     part1,
     part2,
     parse_data,
-    expand_seed_sets,
     find_seed_location,
 )
 import pytest
@@ -25,16 +24,9 @@ def test_parse_data(example_data) -> None:
     assert [39, 0, 15] == parsed_data["soil-to-fertilizer"][2]
 
 
-def test_expand_seed_sets(example_data) -> None:
-    parsed_data = parse_data(example_data)
-    expanded_seed_data = expand_seed_sets(parsed_data)
-    assert 50 == expanded_seed_data["seed-to-soil"][98]
-
-
 def test_get_location(example_data) -> None:
     parsed_data = parse_data(example_data)
-    expanded_seed_data = expand_seed_sets(parsed_data)
-    location = find_seed_location(79, expanded_seed_data)
+    location = find_seed_location(79, parsed_data)
     assert 82 == location
 
 
@@ -43,10 +35,9 @@ def test_part1_example_data_output() -> None:
     assert 35 == output
 
 
-@pytest.mark.skip("Answer is from AOC website")
 def test_part1_data_output():
     output = part1(f"{current_day}/data.txt")
-    assert "currently unknown" == output
+    assert 282277027 == output
 
 
 @pytest.mark.skip("Part 2 not started yet")

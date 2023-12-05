@@ -39,45 +39,41 @@ def parse_data(data: list) -> dict:
     return parsed_data
 
 
-def expand_seed_sets(parsed_data: dict) -> dict:
-    print("Expanding seed sets")
-    keys = [key for key in parsed_data.keys() if key != "seeds"]
-    for key in keys:
-        print(f"Starting on key {key}")
-        data = parsed_data[key]
-        current_key_dict: dict = {}
-        for source_dest_set in data:
-            current_key_dict.update(
-                zip(
-                    range(
-                        source_dest_set[1],
-                        source_dest_set[1] + source_dest_set[2],
-                    ),
-                    range(
-                        source_dest_set[0],
-                        source_dest_set[0] + source_dest_set[2],
-                    ),
-                )
-            )
+def find_value_in_source_dest_list(source_dest_list: list, value: int) -> int:
+    """Takes in the destination source list and a value to find in it and output its
+    corresponding value
 
-        parsed_data[key] = current_key_dict
+    Args:
+        source_dest_list (list): list of lists of dest source range values
+        value (int): value to find in these lists
 
-    return parsed_data
+    Returns:
+        int: the found value, or the original value if it wasn't found
+    """
+
+    for dest_source_range_list in source_dest_list:
+        source = dest_source_range_list[1]
+        destination = dest_source_range_list[0]
+        ds_range = dest_source_range_list[2]
+        if value > source and value < source + ds_range:
+            diff = value - source
+            return destination + diff
+
+    return value
 
 
 def find_seed_location(seed: int, parsed_data: dict) -> int:
     current_value = seed
     keys = [key for key in parsed_data.keys() if key != "seeds"]
     for key in keys:
-        current_dict = parsed_data[key]
+        current_source_dest_list = parsed_data[key]
         print(
             f"Current key is {key}, current value is {current_value}, "
-            f"current dict is {current_dict}"
+            f"current source dest list is {current_source_dest_list}"
         )
-        if current_value not in current_dict.keys():
-            # If it doesn't exist in the dictionary, then continue to the next one
-            continue
-        current_value = current_dict[current_value]
+        current_value = find_value_in_source_dest_list(
+            current_source_dest_list, current_value
+        )
     return current_value
 
 
@@ -96,8 +92,7 @@ def part1(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n\n") if line != ""]
     parsed_data = parse_data(data)
-    expanded_seed_data = expand_seed_sets(parsed_data)
-    return find_lowest_seed_location(expanded_seed_data)
+    return find_lowest_seed_location(parsed_data)
 
 
 def part2(data_path: str) -> int:
