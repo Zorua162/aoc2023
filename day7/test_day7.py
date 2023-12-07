@@ -1,6 +1,5 @@
-from day7.day7_solution import (
+from day7.day7_solution_part1 import (
     part1,
-    part2,
     count_string_occurrences,
     sort_into_kinds,
     rank_bets,

@@ -3,7 +3,7 @@ from collections import defaultdict
 from functools import cmp_to_key
 
 current_day = "day7"
-priority_list = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+priority_list = ["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "1", "J"]
 priority_dict = {
     character: value for value, character in enumerate(reversed(priority_list))
 }
@@ -20,9 +20,19 @@ def count_string_occurrences(split_data: list[list]) -> list[list]:
     return counted_strings
 
 
+def handle_jokers(
+    kinds_dict: dict[str, list], string_data: list[list]
+) -> dict[str, list]:
+    """Determine the best hand with this string, which contains a Joker in it"""
+    print(kinds_dict)
+    return kinds_dict
+
+
 def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
     kinds_dict: dict[str, list] = defaultdict(lambda: [])
     for string_data in counted_strings:
+        if "J" in counted_strings[0]:
+            kinds_dict = handle_jokers(kinds_dict, string_data)
         match max(string_data[2].values()):
             # five
             case 5:
@@ -84,7 +94,7 @@ def calc_values(ranked_bets: list[int]) -> list[int]:
     return [(i + 1) * val for i, val in enumerate(reversed(ranked_bets))]
 
 
-def part1(data_path: str) -> int:
+def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line.split(" ") for line in f_obj.read().split("\n") if line != ""]
     # Sort into "kinds"
@@ -100,18 +110,8 @@ def part1(data_path: str) -> int:
     return sum(values)
 
 
-def part2(data_path: str) -> int:
-    with open(data_path, "r") as f_obj:
-        data = [line for line in f_obj.read().split("\n") if line != ""]
-        print(data)
-    return 0
-
-
 if __name__ == "__main__":
-    # print(part1(f"{current_day}/part1_example_data.txt"))
-    print(part1(f"{current_day}/data.txt"))
-    # print(part2(f"{current_day}/part2_example_data.txt"))
+    print(part2(f"{current_day}/part2_example_data.txt"))
     # print(part2(f"{current_day}/data.txt"))
 
 # Submitted answers
-# 253774472 too high
