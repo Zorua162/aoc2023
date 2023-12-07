@@ -14,6 +14,25 @@ def count_string_occurrences(split_data: list[list]) -> list[list]:
     return counted_strings
 
 
+def convert_to_num(string: str) -> int:
+    """Convert to number, where numbers have a large value then letters"""
+    total_val = 0
+    for i, char in enumerate(string):
+        if char.isdigit():
+            total_val += 10**i * (ord("a") + ord(char))
+        else:
+            total_val += 10**i * ord(char)
+    return total_val
+
+
+def get_adjusted_value_of_string(counted_strings: list[list]) -> list[list]:
+    adjusted_value_lists = []
+    for string_data in counted_strings:
+        string_data.append(convert_to_num(string_data[0]))
+        adjusted_value_lists.append(string_data)
+    return adjusted_value_lists
+
+
 def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
     kinds_dict: dict[str, list] = defaultdict(lambda: [])
     for string_data in counted_strings:
@@ -27,18 +46,14 @@ def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
 
             # full house / three
             case 3:
-                if 2 in string_data[2].values():
+                if len(string_data[2].values()) == 2:
                     kinds_dict["full"].append(string_data)
                 else:
                     kinds_dict["three"].append(string_data)
 
             # two
             case 2:
-                if 1 in string_data[2].values():
-                    raise Exception(
-                        "This incorrectly determines when a two pair is "
-                        "instead of a one pair is, for example 32T3K 765"
-                    )
+                if len(string_data[2].values()) == 3:
                     kinds_dict["two_pair"].append(string_data)
                 else:
                     kinds_dict["one_pair"].append(string_data)
@@ -50,27 +65,35 @@ def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
 
 def rank_bets(kinds: dict[str, list]) -> list:
     keys = ["five", "four", "full", "three", "two_pair", "one_pair", "high"]
-    out_bets = []
+    out_bets: list = []
     for key in keys:
-        print(key)
         current_list = kinds[key]
         # Sort the hand
-        sorted_hand = sorted(current_list, key=lambda x: x[0])
-        out_bets.extend([int(hand[1]) for hand in sorted_hand])
+        sorted_values = sorted(current_list, key=lambda x: x[3])
+        out_bets.extend([int(hand[1]) for hand in sorted_values])
+        print(f"key {key} out_bets {out_bets}, current_list {current_list}")
     return out_bets
+
+
+def calc_values(ranked_bets: list[int]) -> list[int]:
+    return [(i + 1) * val for i, val in enumerate(reversed(ranked_bets))]
 
 
 def part1(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line.split(" ") for line in f_obj.read().split("\n") if line != ""]
-    print(data)
     # Sort into "kinds"
     counted_strings = count_string_occurrences(data)
-    kinds = sort_into_kinds(counted_strings)
-    print(kinds)
+    print(f"counted_strings {counted_strings}")
+    adjusted = get_adjusted_value_of_string(counted_strings)
+    print(f"\n adjusted {adjusted}")
+    kinds = sort_into_kinds(adjusted)
+    print(f"\nkinds {kinds}")
     ranked_bets = rank_bets(kinds)
-    print(ranked_bets)
-    return 0
+    print(f"ranked_bets {ranked_bets}")
+    values = calc_values(ranked_bets)
+
+    return sum(values)
 
 
 def part2(data_path: str) -> int:
@@ -81,7 +104,10 @@ def part2(data_path: str) -> int:
 
 
 if __name__ == "__main__":
-    print(part1(f"{current_day}/part1_example_data.txt"))
-    # print(part1(f"{current_day}/data.txt"))
+    # print(part1(f"{current_day}/part1_example_data.txt"))
+    print(part1(f"{current_day}/data.txt"))
     # print(part2(f"{current_day}/part2_example_data.txt"))
     # print(part2(f"{current_day}/data.txt"))
+
+# Submitted answers
+# 253774472 too high
