@@ -1,6 +1,12 @@
 from collections import defaultdict
 
+from functools import cmp_to_key
+
 current_day = "day7"
+priority_list = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+priority_dict = {
+    character: value for value, character in enumerate(reversed(priority_list))
+}
 
 
 def count_string_occurrences(split_data: list[list]) -> list[list]:
@@ -12,25 +18,6 @@ def count_string_occurrences(split_data: list[list]) -> list[list]:
         line.append(letter_dict)
         counted_strings.append(line)
     return counted_strings
-
-
-def convert_to_num(string: str) -> int:
-    """Convert to number, where numbers have a large value then letters"""
-    total_val = 0
-    for i, char in enumerate(string):
-        if char.isdigit():
-            total_val += 10**i * (ord("a") + ord(char))
-        else:
-            total_val += 10**i * ord(char)
-    return total_val
-
-
-def get_adjusted_value_of_string(counted_strings: list[list]) -> list[list]:
-    adjusted_value_lists = []
-    for string_data in counted_strings:
-        string_data.append(convert_to_num(string_data[0]))
-        adjusted_value_lists.append(string_data)
-    return adjusted_value_lists
 
 
 def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
@@ -63,14 +50,32 @@ def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
     return kinds_dict
 
 
+def comp_strings(a: str, b: str) -> int:
+    print(f"comp_strings {a} {b}")
+    a_characters = a[0]
+    b_characters = b[0]
+    for i in range(len(a_characters)):
+        if a_characters[i] == b_characters[i]:
+            continue
+        return round(
+            2
+            * ((priority_dict[a_characters[i]] < priority_dict[b_characters[i]]) - 0.5)
+        )
+    return 0
+
+
+def sort_values(values: list) -> list:
+    return sorted(values, key=cmp_to_key(comp_strings))
+    # return sorted(values, key=lambda x: priority_dict[x[0]])
+
+
 def rank_bets(kinds: dict[str, list]) -> list:
     keys = ["five", "four", "full", "three", "two_pair", "one_pair", "high"]
     out_bets: list = []
     for key in keys:
         current_list = kinds[key]
         # Sort the hand
-        sorted_values = sorted(current_list, key=lambda x: x[3])
-        out_bets.extend([int(hand[1]) for hand in sorted_values])
+        out_bets.extend([int(hand[1]) for hand in sort_values(current_list)])
         print(f"key {key} out_bets {out_bets}, current_list {current_list}")
     return out_bets
 
@@ -85,9 +90,8 @@ def part1(data_path: str) -> int:
     # Sort into "kinds"
     counted_strings = count_string_occurrences(data)
     print(f"counted_strings {counted_strings}")
-    adjusted = get_adjusted_value_of_string(counted_strings)
-    print(f"\n adjusted {adjusted}")
-    kinds = sort_into_kinds(adjusted)
+    print(f"\n adjusted {counted_strings}")
+    kinds = sort_into_kinds(counted_strings)
     print(f"\nkinds {kinds}")
     ranked_bets = rank_bets(kinds)
     print(f"ranked_bets {ranked_bets}")
