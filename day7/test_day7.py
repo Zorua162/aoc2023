@@ -6,6 +6,7 @@ from day7.day7_solution_part1 import (
     calc_values,
     sort_values,
 )
+from day7.day7_solution_part2 import part2
 import pytest
 
 current_day = "day7"
@@ -134,10 +135,9 @@ def test_part1_data_output():
     assert 253638586 == output
 
 
-@pytest.mark.skip("Part 2 not started yet")
 def test_part2_example_data_output() -> None:
     output: int = part2(f"{current_day}/part1_example_data.txt")
-    assert 0 == output
+    assert 5905 == output
 
 
 @pytest.mark.skip("Answer is from AOC website")
