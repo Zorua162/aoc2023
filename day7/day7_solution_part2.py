@@ -24,7 +24,7 @@ priority_list_part_2 = [
     "J",
 ]
 priority_dict = {
-    character: value for value, character in enumerate(reversed(priority_list))
+    character: value for value, character in enumerate(reversed(priority_list_part_2))
 }
 
 
