@@ -1,12 +1,16 @@
-from day7.day7_solution_part1 import (
+from day7.day7_solution import (
     part1,
+    part2,
     count_string_occurrences,
     sort_into_kinds,
     rank_bets,
     calc_values,
     sort_values,
+    priority_list_part_1,
+    priority_list_part_2,
+    create_priority_dict,
+    handle_jokers,
 )
-from day7.day7_solution_part2 import part2
 import pytest
 
 current_day = "day7"
@@ -77,7 +81,8 @@ def test_sort_hands() -> None:
         ["AAAA3", "666"],
         ["AAAA1", "444"],
     ]
-    sorted_values = sort_values(data)
+    priority_dict = create_priority_dict(priority_list_part_1)
+    sorted_values = sort_values(data, priority_dict)
     assert sorted_values[0][0] == "AAAAA"
 
 
@@ -88,7 +93,8 @@ def test_sort_hands_simple() -> None:
         ["AA", "111"],
     ]
 
-    sorted_values = sort_values(data)
+    priority_dict = create_priority_dict(priority_list_part_1)
+    sorted_values = sort_values(data, priority_dict)
     print(sorted_values)
     assert sorted_values[0][0] == "AA"
 
@@ -97,7 +103,7 @@ def test_rank_bets_single_key() -> None:
     data = [["AAAAK", "222"], ["AAAAQ", "333"], ["AAAAA", "111"]]
     counted = count_string_occurrences(data)
     sorted = sort_into_kinds(counted)
-    ranked = rank_bets(sorted)
+    ranked = rank_bets(sorted, priority_list_part_1)
     print(ranked)
     assert [111, 222, 333] == ranked
 
@@ -110,7 +116,7 @@ def test_rank_bets() -> None:
     ]
     counted = count_string_occurrences(data)
     sorted = sort_into_kinds(counted)
-    ranked = rank_bets(sorted)
+    ranked = rank_bets(sorted, priority_list_part_1)
     print(ranked)
     assert [111, 222, 333] == ranked
 
@@ -119,7 +125,7 @@ def test_rank_calc_values() -> None:
     data = [["99999", "222"], ["88888", "333"], ["AAAAA", "111"]]
     counted = count_string_occurrences(data)
     sorted = sort_into_kinds(counted)
-    ranked = rank_bets(sorted)
+    ranked = rank_bets(sorted, priority_list_part_1)
     values = calc_values(ranked)
     print(values)
     assert [333, 444, 333] == values
@@ -138,6 +144,20 @@ def test_part1_data_output():
 def test_part2_example_data_output() -> None:
     output: int = part2(f"{current_day}/part1_example_data.txt")
     assert 5905 == output
+
+
+def test_jokers() -> None:
+    data = ["AJJJJ 101"]
+    split_data = [line.split(" ") for line in data]
+    counted_strings = count_string_occurrences(split_data)
+    print(f"counted_strings {counted_strings}")
+    counted_strings = handle_jokers(counted_strings)
+    print(f"\n jokers handled{counted_strings}")
+    kinds = sort_into_kinds(counted_strings)
+    print(f"\nkinds {kinds}")
+    ranked_bets = rank_bets(kinds, priority_list_part_2)
+    print(ranked_bets)
+    assert False
 
 
 @pytest.mark.skip("Answer is from AOC website")

@@ -3,10 +3,38 @@ from collections import defaultdict
 from functools import cmp_to_key
 
 current_day = "day7"
-priority_list = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
-priority_dict = {
-    character: value for value, character in enumerate(reversed(priority_list))
-}
+priority_list_part_1 = [
+    "A",
+    "K",
+    "Q",
+    "J",
+    "T",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "1",
+]
+priority_list_part_2 = [
+    "A",
+    "K",
+    "Q",
+    "T",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "1",
+    "J",
+]
 
 
 def count_string_occurrences(split_data: list[list]) -> list[list]:
@@ -64,7 +92,7 @@ def comp_strings(a: str, b: str, priority_dict) -> int:
     return 0
 
 
-def sort_values(values: list) -> list:
+def sort_values(values: list, priority_dict: dict) -> list:
     return sorted(
         values,
         key=cmp_to_key(lambda a, b: comp_strings(a, b, priority_dict)),  # type: ignore
@@ -72,13 +100,20 @@ def sort_values(values: list) -> list:
     # return sorted(values, key=lambda x: priority_dict[x[0]])
 
 
-def rank_bets(kinds: dict[str, list]) -> list:
+def create_priority_dict(priority_list: list) -> dict:
+    return {character: value for value, character in enumerate(reversed(priority_list))}
+
+
+def rank_bets(kinds: dict[str, list], priority_list) -> list:
     keys = ["five", "four", "full", "three", "two_pair", "one_pair", "high"]
+    priority_dict = create_priority_dict(priority_list)
     out_bets: list = []
     for key in keys:
         current_list = kinds[key]
         # Sort the hand
-        out_bets.extend([int(hand[1]) for hand in sort_values(current_list)])
+        out_bets.extend(
+            [int(hand[1]) for hand in sort_values(current_list, priority_dict)]
+        )
         print(f"key {key} out_bets {out_bets}, current_list {current_list}")
     return out_bets
 
@@ -96,7 +131,43 @@ def part1(data_path: str) -> int:
     print(f"\n adjusted {counted_strings}")
     kinds = sort_into_kinds(counted_strings)
     print(f"\nkinds {kinds}")
-    ranked_bets = rank_bets(kinds)
+    ranked_bets = rank_bets(kinds, priority_list_part_1)
+    print(f"ranked_bets {ranked_bets}")
+    values = calc_values(ranked_bets)
+
+    return sum(values)
+
+
+def handle_jokers(counted_strings: list) -> list:
+    """Determine the best hand with this string, which contains a Joker in it"""
+    for i, string_data in enumerate(counted_strings):
+        if "J" in string_data[0]:
+            print("handle_jokers called")
+            counted_cards: dict[str, int] = string_data[2]
+            max_card = [
+                key
+                for key, value in counted_cards.items()
+                if value == max(counted_cards.values())
+            ][0]
+            counted_cards[max_card] += counted_cards["J"]
+            counted_cards["J"] = 0
+            string_data[2] = counted_cards
+            counted_strings[i] = string_data
+
+    return counted_strings
+
+
+def part2(data_path: str) -> int:
+    with open(data_path, "r") as f_obj:
+        data = [line.split(" ") for line in f_obj.read().split("\n") if line != ""]
+    # Sort into "kinds"
+    counted_strings = count_string_occurrences(data)
+    print(f"counted_strings {counted_strings}")
+    counted_strings = handle_jokers(counted_strings)
+    print(f"\n jokers handled{counted_strings}")
+    kinds = sort_into_kinds(counted_strings)
+    print(f"\nkinds {kinds}")
+    ranked_bets = rank_bets(kinds, priority_list_part_2)
     print(f"ranked_bets {ranked_bets}")
     values = calc_values(ranked_bets)
 
@@ -105,7 +176,10 @@ def part1(data_path: str) -> int:
 
 if __name__ == "__main__":
     # print(part1(f"{current_day}/part1_example_data.txt"))
-    print(part1(f"{current_day}/data.txt"))
+    # print(part1(f"{current_day}/data.txt"))
+    # print(part2(f"{current_day}/part1_example_data.txt"))
+    print(part2(f"{current_day}/data.txt"))
 
 # Submitted answers
 # 253774472 too high
+# 254232419
