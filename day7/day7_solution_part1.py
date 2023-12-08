@@ -50,7 +50,7 @@ def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
     return kinds_dict
 
 
-def comp_strings(a: str, b: str) -> int:
+def comp_strings(a: str, b: str, priority_dict) -> int:
     print(f"comp_strings {a} {b}")
     a_characters = a[0]
     b_characters = b[0]
@@ -65,7 +65,10 @@ def comp_strings(a: str, b: str) -> int:
 
 
 def sort_values(values: list) -> list:
-    return sorted(values, key=cmp_to_key(comp_strings))
+    return sorted(
+        values,
+        key=cmp_to_key(lambda a, b: comp_strings(a, b, priority_dict)),  # type: ignore
+    )
     # return sorted(values, key=lambda x: priority_dict[x[0]])
 
 
