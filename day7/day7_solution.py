@@ -142,14 +142,19 @@ def handle_jokers(counted_strings: list) -> list:
     """Determine the best hand with this string, which contains a Joker in it"""
     for i, string_data in enumerate(counted_strings):
         if "J" in string_data[0]:
-            print("handle_jokers called")
             counted_cards: dict[str, int] = string_data[2]
+            print(f"counted_cards_pre pre {counted_cards}")
+            counted_cards_no_j = counted_cards.copy()
+            if len(counted_cards_no_j) > 1:
+                del counted_cards_no_j["J"]
             max_card = [
                 key
                 for key, value in counted_cards.items()
-                if value == max(counted_cards.values())
+                if value == max(counted_cards_no_j.values())
             ][0]
+            # print(f"counted card pre add {counted_cards}")
             counted_cards[max_card] += counted_cards["J"]
+            # print(f"counted card post add {counted_cards}")
             counted_cards["J"] = 0
             string_data[2] = counted_cards
             counted_strings[i] = string_data
@@ -182,4 +187,4 @@ if __name__ == "__main__":
 
 # Submitted answers
 # 253774472 too high
-# 254232419
+# 252540485 too low

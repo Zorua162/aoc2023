@@ -147,17 +147,29 @@ def test_part2_example_data_output() -> None:
 
 
 def test_jokers() -> None:
-    data = ["AJJJJ 101"]
+    data = ["AJJJJ 101", "AAJJJ 102", "AAAJJ 103", "AAAAJ 104"]
     split_data = [line.split(" ") for line in data]
     counted_strings = count_string_occurrences(split_data)
     print(f"counted_strings {counted_strings}")
     counted_strings = handle_jokers(counted_strings)
-    print(f"\n jokers handled{counted_strings}")
+
+    assert counted_strings[0][2]["A"] == 5
+    assert counted_strings[1][2]["A"] == 5
+    assert counted_strings[2][2]["A"] == 5
+    assert counted_strings[3][2]["A"] == 5
+
+
+def test_jokers_sorted() -> None:
+    data = ["AAJJJ 100", "AAAJJ 100", "AAAAJ 100", "AJJJJ 100"]
+    split_data = [line.split(" ") for line in data]
+    counted_strings = count_string_occurrences(split_data)
+    print(f"counted_strings {counted_strings}")
+    counted_strings = handle_jokers(counted_strings)
     kinds = sort_into_kinds(counted_strings)
-    print(f"\nkinds {kinds}")
     ranked_bets = rank_bets(kinds, priority_list_part_2)
-    print(ranked_bets)
-    assert False
+    print(f"ranked_bets {ranked_bets}")
+    values = calc_values(ranked_bets)
+    assert [100, 200, 300, 400] == values
 
 
 @pytest.mark.skip("Answer is from AOC website")
