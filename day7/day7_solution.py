@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 
 from functools import cmp_to_key
 
@@ -79,7 +80,7 @@ def sort_into_kinds(counted_strings: list[list]) -> dict[str, list]:
 
 
 def comp_strings(a: str, b: str, priority_dict) -> int:
-    print(f"comp_strings {a} {b}")
+    # print(f"comp_strings {a} {b}")
     a_characters = a[0]
     b_characters = b[0]
     for i in range(len(a_characters)):
@@ -146,20 +147,28 @@ def handle_jokers(counted_strings: list) -> list:
             print(f"counted_cards_pre pre {counted_cards}")
             counted_cards_no_j = counted_cards.copy()
             if len(counted_cards_no_j) > 1:
+                print("J removed")
                 del counted_cards_no_j["J"]
+                print(f"counted_cards_no_j {counted_cards_no_j}")
             max_card = [
                 key
-                for key, value in counted_cards.items()
+                for key, value in counted_cards_no_j.items()
                 if value == max(counted_cards_no_j.values())
             ][0]
-            # print(f"counted card pre add {counted_cards}")
+            print(f"counted card pre add {counted_cards} max_card {max_card}")
             counted_cards[max_card] += counted_cards["J"]
-            # print(f"counted card post add {counted_cards}")
+            print(f"counted card post add {counted_cards}")
             counted_cards["J"] = 0
             string_data[2] = counted_cards
             counted_strings[i] = string_data
 
     return counted_strings
+
+
+def write_out_to_file(kinds: dict) -> None:
+    for key in kinds:
+        with open(f"{current_day}/kinds_{key}.txt", "w") as out_obj:
+            json.dump(kinds[key], out_obj, indent=4)
 
 
 def part2(data_path: str) -> int:
@@ -172,6 +181,7 @@ def part2(data_path: str) -> int:
     print(f"\n jokers handled{counted_strings}")
     kinds = sort_into_kinds(counted_strings)
     print(f"\nkinds {kinds}")
+    write_out_to_file(kinds)
     ranked_bets = rank_bets(kinds, priority_list_part_2)
     print(f"ranked_bets {ranked_bets}")
     values = calc_values(ranked_bets)
@@ -188,3 +198,4 @@ if __name__ == "__main__":
 # Submitted answers
 # 253774472 too high
 # 252540485 too low
+# 253511455 too high
