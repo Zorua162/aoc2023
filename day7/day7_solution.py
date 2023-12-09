@@ -169,6 +169,7 @@ def write_out_to_file(kinds: dict) -> None:
     for key in kinds:
         with open(f"{current_day}/kinds_{key}.txt", "w") as out_obj:
             json.dump(kinds[key], out_obj, indent=4)
+            out_obj.writelines("\n")
 
 
 def part2(data_path: str) -> int:
