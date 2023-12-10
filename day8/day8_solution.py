@@ -94,15 +94,42 @@ def simultaneously_search_paths(
     return taken_paths
 
 
+def follow_full_instructions(
+    starting_location: str, instructions: str, paths: dict[str, dict[str, str]]
+) -> dict:
+    path_data: dict = {}
+    z_indexes = []
+    current_location = starting_location
+    for i, instruction in enumerate(instructions):
+        current_location = paths[current_location][instruction]
+        if current_location[2] == "Z":
+            z_indexes.append(i)
+    path_data["end_location"] = current_location
+    path_data["z_indexes"] = z_indexes
+
+    return path_data
+
+
+def compute_instruction_paths(
+    instructions: str, paths: dict[str, dict[str, str]]
+) -> dict:
+    full_instruction_path_data: dict[str, dict] = {}
+    for key, value in paths.items():
+        full_instruction_path_data[key] = follow_full_instructions(
+            key, instructions, paths
+        )
+
+    return full_instruction_path_data
+
+
 def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n") if line != ""]
     print(data)
     instructions, paths = parse_data(data)
-    starting_locations = get_all_starting_locations(paths)
-    taken_paths = simultaneously_search_paths(starting_locations, instructions, paths)
-    print(taken_paths)
-    return len(taken_paths[0])
+    # starting_locations = get_all_starting_locations(paths)
+    full_instruction_path_data = compute_instruction_paths(instructions, paths)
+    return full_instruction_path_data
 
 
 if __name__ == "__main__":
