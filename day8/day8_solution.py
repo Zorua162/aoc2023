@@ -114,7 +114,7 @@ def compute_instruction_paths(
     instructions: str, paths: dict[str, dict[str, str]]
 ) -> dict:
     full_instruction_path_data: dict[str, dict] = {}
-    for key, value in paths.items():
+    for key, _ in paths.items():
         full_instruction_path_data[key] = follow_full_instructions(
             key, instructions, paths
         )
@@ -122,14 +122,61 @@ def compute_instruction_paths(
     return full_instruction_path_data
 
 
+def in_all_indexes(index: int, last_run_all_z_indexes: list[list[int]]) -> bool:
+    for indexes in last_run_all_z_indexes:
+        if index not in indexes:
+            return False
+    return True
+
+
+def last_run_all_z_at_same_time(
+    last_run_all_z_indexes: list[list[int]], instructions_length: int
+) -> tuple[bool, int]:
+    # Only search through first list, if its not in that list then its not in all
+    for index in last_run_all_z_indexes[0]:
+        if in_all_indexes(index, last_run_all_z_indexes):
+            return True, index + 1
+    return False, instructions_length
+
+
+def find_how_many_steps_all_end_Z(
+    instructions: str, starting_locations: list[str], full_instruction_path_data: dict
+) -> int:
+    locations: list[str] = starting_locations
+    last_run_all_z_indexes: list[list[int]] = [[] for _ in locations]
+    total_steps = 0
+    all_z = False
+    while not all_z:
+        # Run another iteration of the instructions
+        last_run_all_z_indexes = []
+        new_locations: list[str] = []
+        for location in locations:
+            location_data = full_instruction_path_data[location]
+            last_run_all_z_indexes.append(location_data["z_indexes"])
+            new_locations.append(location_data["end_location"])
+        all_z, steps = last_run_all_z_at_same_time(
+            last_run_all_z_indexes, len(instructions)
+        )
+        print(f"steps {steps}")
+        locations = new_locations
+        total_steps += steps
+        print(f"locations {locations} total_steps {total_steps:,}")
+    return total_steps
+
+
 def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n") if line != ""]
     print(data)
     instructions, paths = parse_data(data)
-    # starting_locations = get_all_starting_locations(paths)
+    starting_locations = get_all_starting_locations(paths)
     full_instruction_path_data = compute_instruction_paths(instructions, paths)
-    return full_instruction_path_data
+    print(full_instruction_path_data)
+    total_steps = find_how_many_steps_all_end_Z(
+        instructions, starting_locations, full_instruction_path_data
+    )
+
+    return total_steps
 
 
 if __name__ == "__main__":
@@ -140,4 +187,5 @@ if __name__ == "__main__":
 
 # Submitted answers part 2
 # 210700000 too low
-# 393400000 too low
+# 393,400,000 too low
+# 22,715,535,324 too low
