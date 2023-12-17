@@ -64,6 +64,8 @@ are commited.
 
 - trailing whitespace: Remove whitespace
 
+
+
 ### Pre-commit automation
 
 Pre-commit.ci automatically runs these checks as an action on Github
