@@ -6,6 +6,12 @@ def print_grid(grid: list[str]):
         print(line)
 
 
+def print_to_file(data: list[str]):
+    with open(f"{current_day}/printed.txt", "w") as f_out:
+        for line in data:
+            f_out.write(line)
+
+
 def part1(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n") if line != ""]
