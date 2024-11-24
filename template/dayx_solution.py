@@ -1,17 +1,22 @@
 current_day = "dayx"
 
 
+def print_grid(grid: list[str]):
+    for line in grid:
+        print(line)
+
+
 def part1(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n") if line != ""]
-    print(data)
+    print_grid(data)
     return 0
 
 
 def part2(data_path: str) -> int:
     with open(data_path, "r") as f_obj:
         data = [line for line in f_obj.read().split("\n") if line != ""]
-        print(data)
+    print_grid(data)
     return 0
 
 
